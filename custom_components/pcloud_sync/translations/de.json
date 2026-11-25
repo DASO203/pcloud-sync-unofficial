@@ -155,7 +155,9 @@
   },
   "entity": {
     "button": {
-      "sync_now": { "name": "Jetzt synchronisieren" }
+      "sync_now": {
+        "name": "Jetzt synchronisieren"
+      }
     },
     "sensor": {
       "status": {
@@ -167,60 +169,162 @@
           "auth_error": "Erneute Anmeldung nötig"
         }
       },
-      "last_sync": { "name": "Letzter Sync" },
-      "pending_files": { "name": "Ausstehende Dateien" },
-      "uploaded_files": { "name": "Hochgeladene Dateien" },
-      "uploaded_data": { "name": "Hochgeladene Daten" },
-      "deleted_local_files": { "name": "Lokal gelöschte Dateien" },
-      "failed_uploads": { "name": "Fehlgeschlagene Uploads" },
-      "quota_used": { "name": "Speicher belegt" },
-      "quota_free": { "name": "Speicher frei" },
-      "quota_total": { "name": "Speicher gesamt" }
+      "last_sync": {
+        "name": "Letzter Sync"
+      },
+      "pending_files": {
+        "name": "Ausstehende Dateien"
+      },
+      "uploaded_files": {
+        "name": "Hochgeladene Dateien"
+      },
+      "uploaded_data": {
+        "name": "Hochgeladene Daten"
+      },
+      "deleted_local_files": {
+        "name": "Lokal gelöschte Dateien"
+      },
+      "failed_uploads": {
+        "name": "Fehlgeschlagene Uploads"
+      },
+      "quota_used": {
+        "name": "Speicher belegt"
+      },
+      "quota_free": {
+        "name": "Speicher frei"
+      },
+      "quota_total": {
+        "name": "Speicher gesamt"
+      }
     }
   },
   "exceptions": {
-    "no_entry": { "message": "Kein geladener pCloud-Sync-Eintrag gefunden (config_entry_id prüfen)." },
-    "multiple_entries": { "message": "Mehrere pCloud-Konten eingerichtet - bitte config_entry_id angeben." }
+    "no_entry": {
+      "message": "Kein geladener pCloud-Sync-Eintrag gefunden (config_entry_id prüfen)."
+    },
+    "multiple_entries": {
+      "message": "Mehrere pCloud-Konten eingerichtet - bitte config_entry_id angeben."
+    }
   },
   "services": {
     "sync_now": {
       "name": "Jetzt synchronisieren",
       "description": "Durchsucht alle überwachten Ordner (und den Zwischenspeicher) und lädt neue oder geänderte Dateien hoch.",
       "fields": {
-        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+        "config_entry_id": {
+          "name": "pCloud-Konto",
+          "description": "Nur nötig, wenn mehrere Konten eingerichtet sind."
+        }
       }
     },
     "upload_file": {
       "name": "Datei hochladen",
       "description": "Lädt eine einzelne lokale Datei hoch. Die Datei muss in einem freigegebenen Ordner liegen.",
       "fields": {
-        "path": { "name": "Pfad", "description": "Absoluter Pfad der lokalen Datei." },
-        "subfolder": { "name": "Unterordner", "description": "Unterordner unterhalb des pCloud-Zielordners." },
-        "delete_after_upload": { "name": "Nach Upload löschen", "description": "Lokale Datei nach einem per Prüfsumme verifizierten Upload löschen." },
-        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+        "path": {
+          "name": "Pfad",
+          "description": "Absoluter Pfad der lokalen Datei."
+        },
+        "subfolder": {
+          "name": "Unterordner",
+          "description": "Unterordner unterhalb des pCloud-Zielordners."
+        },
+        "delete_after_upload": {
+          "name": "Nach Upload löschen",
+          "description": "Lokale Datei nach einem per Prüfsumme verifizierten Upload löschen."
+        },
+        "config_entry_id": {
+          "name": "pCloud-Konto",
+          "description": "Nur nötig, wenn mehrere Konten eingerichtet sind."
+        }
       }
     },
     "upload_camera_snapshot": {
       "name": "Kamera-Snapshot hochladen",
       "description": "Erstellt einen Snapshot einer oder mehrerer Kameras und lädt ihn hoch.",
       "fields": {
-        "entity_id": { "name": "Kameras", "description": "Kamera-Entitäten." },
-        "subfolder": { "name": "Unterordner", "description": "Standard: snapshots/[kamera]." },
-        "filename": { "name": "Dateiname", "description": "Standard: [kamera]_[zeitstempel].jpg" },
-        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+        "entity_id": {
+          "name": "Kameras",
+          "description": "Kamera-Entitäten."
+        },
+        "subfolder": {
+          "name": "Unterordner",
+          "description": "Standard: snapshots/[kamera]."
+        },
+        "filename": {
+          "name": "Dateiname",
+          "description": "Standard: [kamera]_[zeitstempel].jpg"
+        },
+        "config_entry_id": {
+          "name": "pCloud-Konto",
+          "description": "Nur nötig, wenn mehrere Konten eingerichtet sind."
+        }
       }
     },
     "upload_frigate_event": {
       "name": "Frigate-Event hochladen",
       "description": "Lädt Clip und/oder Snapshot eines Frigate-Events über die Frigate-API herunter und anschließend zu pCloud hoch.",
       "fields": {
-        "event_id": { "name": "Event-ID", "description": "Frigate-Event-ID, z. B. aus dem MQTT-Topic frigate/events (after.id)." },
-        "media": { "name": "Medien", "description": "Was hochgeladen werden soll." },
-        "camera_name": { "name": "Kameraname", "description": "Wird für Ordner- und Dateinamen genutzt." },
-        "subfolder": { "name": "Unterordner", "description": "Standard: frigate/[kamera]." },
-        "frigate_url": { "name": "Frigate-URL", "description": "Überschreibt die Frigate-URL aus den Optionen." },
-        "retries": { "name": "Wiederholungen", "description": "Frigate erstellt Clips erst nach Event-Ende; so oft wird alle 10 s erneut versucht." },
-        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+        "event_id": {
+          "name": "Event-ID",
+          "description": "Frigate-Event-ID, z. B. aus dem MQTT-Topic frigate/events (after.id)."
+        },
+        "media": {
+          "name": "Medien",
+          "description": "Was hochgeladen werden soll."
+        },
+        "camera_name": {
+          "name": "Kameraname",
+          "description": "Wird für Ordner- und Dateinamen genutzt."
+        },
+        "subfolder": {
+          "name": "Unterordner",
+          "description": "Standard: frigate/[kamera]."
+        },
+        "frigate_url": {
+          "name": "Frigate-URL",
+          "description": "Überschreibt die Frigate-URL aus den Optionen."
+        },
+        "retries": {
+          "name": "Wiederholungen",
+          "description": "Frigate erstellt Clips erst nach Event-Ende; so oft wird alle 10 s erneut versucht."
+        },
+        "config_entry_id": {
+          "name": "pCloud-Konto",
+          "description": "Nur nötig, wenn mehrere Konten eingerichtet sind."
+        }
+      }
+    },
+    "list_folder": {
+      "name": "Hochgeladene Dateien auflisten",
+      "description": "Listet Dateien unterhalb des pCloud-Zielordners auf (nur lesend, nur für Administratoren). Wird z. B. von Alcedo NVR genutzt, um archivierte Ereignisse anzuzeigen.",
+      "fields": {
+        "path": {
+          "name": "Pfad",
+          "description": "Ordner unterhalb des Zielordners, leer = Zielordner."
+        },
+        "recursive": {
+          "name": "Unterordner einbeziehen",
+          "description": "Auch alle Unterordner auflisten."
+        },
+        "config_entry_id": {
+          "name": "pCloud-Konto",
+          "description": "Nur nötig, wenn mehrere Konten eingerichtet sind."
+        }
+      }
+    },
+    "get_file_link": {
+      "name": "Download-Link abrufen",
+      "description": "Liefert einen zeitlich begrenzten Download-Link einer Datei unterhalb des pCloud-Zielordners (nur für Administratoren).",
+      "fields": {
+        "path": {
+          "name": "Pfad",
+          "description": "Datei unterhalb des Zielordners (oder der Remote-Pfad, den ein Upload zurückgegeben hat)."
+        },
+        "config_entry_id": {
+          "name": "pCloud-Konto",
+          "description": "Nur nötig, wenn mehrere Konten eingerichtet sind."
+        }
       }
     }
   }

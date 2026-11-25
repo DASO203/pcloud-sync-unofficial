@@ -86,3 +86,30 @@ upload_frigate_event:
       selector:
         config_entry:
           integration: pcloud_sync
+
+list_folder:
+  fields:
+    path:
+      example: alcedo/einfahrt
+      selector:
+        text:
+    recursive:
+      default: false
+      selector:
+        boolean:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: pcloud_sync
+
+get_file_link:
+  fields:
+    path:
+      required: true
+      example: alcedo/einfahrt/2026/11/25/einfahrt-20261125T101530-ab12.mp4
+      selector:
+        text:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: pcloud_sync

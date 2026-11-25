@@ -6,6 +6,8 @@ Only the API methods that are actually needed are implemented:
 * ``createfolderifnotexists`` - build the remote folder tree
 * ``uploadfile``              - upload a file (multipart, streamed from disk)
 * ``checksumfile``            - verify an upload before deleting local data
+* ``listfolder``              - list uploaded files (read back, e.g. Alcedo NVR timeline)
+* ``getfilelink``             - temporary download link of an uploaded file
 
 Authentication uses an OAuth2 access token sent as ``Authorization: Bearer``
 header. The token is never put into URLs or log messages.
@@ -243,3 +245,18 @@ class PCloudApi:
         """Return the SHA-1 checksum pCloud calculated for a file."""
         result = await self._call("checksumfile", {"fileid": file_id})
         return result.get("sha1")
+
+    # ------------------------------------------------------------------ read back
+
+    async def async_list_folder(self, path: str, *, recursive: bool = False) -> dict[str, Any]:
+        """Return the pCloud metadata tree of *path* (``contents`` per folder)."""
+        result = await self._call("listfolder", {"path": path or "/", "recursive": int(recursive)})
+        return result.get("metadata") or {}
+
+    async def async_file_link(self, path: str) -> tuple[str, str | None]:
+        """Return a temporary download URL of the file at *path* and its expiry."""
+        result = await self._call("getfilelink", {"path": path, "forcedownload": 0})
+        hosts = result.get("hosts") or []
+        if not hosts or not result.get("path"):
+            raise PCloudError("getfilelink: pCloud returned no download host")
+        return f"https://{hosts[0]}{result['path']}", result.get("expires")

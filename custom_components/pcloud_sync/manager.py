@@ -42,7 +42,9 @@ from .const import (
     EVENT_FAILED,
     EVENT_LOCAL_DELETED,
     EVENT_UPLOADED,
+    FOLDER_NOT_FOUND_CODES,
     MAX_IN_MEMORY_BYTES,
+    MAX_LISTED_ITEMS,
     MEDIA_BOTH,
     MEDIA_CLIP,
     MEDIA_SNAPSHOT,
@@ -634,6 +636,84 @@ class SyncManager:
         if info is None and not self.settings.dry_run:
             raise HomeAssistantError(f"Upload of {path} failed: {self.last_error}")
         return info or {"dry_run": True}
+
+    # ---------------------------------------------------------------- read back
+
+    def _confined(self, path: str) -> str:
+        """Absolute pCloud path inside the configured target folder.
+
+        Absolute paths below the target folder are kept, everything else is
+        treated as relative to it. ``..`` is rejected, so the services can never
+        read outside the folder this integration writes to.
+        """
+        root = split_remote_path(self.settings.remote_folder)
+        parts = split_remote_path(path or "")
+        if path.startswith("/") and parts[: len(root)] == root:
+            return "/" + "/".join(parts)
+        return join_remote(self.settings.remote_folder, path or "")
+
+    async def async_list_folder(self, path: str, recursive: bool) -> dict[str, Any]:
+        """List files below the target folder (service ``list_folder``)."""
+        try:
+            target = self._confined(path)
+        except UnsafePathError as err:
+            raise HomeAssistantError(str(err)) from err
+
+        async def _do() -> dict[str, Any]:
+            try:
+                meta = await self.api.async_list_folder(target, recursive=recursive)
+            except PCloudAuthError:
+                raise
+            except PCloudError as err:
+                if any(f"error {code}" in str(err) for code in FOLDER_NOT_FOUND_CODES):
+                    return {"path": target, "exists": False, "files": [], "truncated": False}
+                raise HomeAssistantError(f"pCloud: {err}") from err
+            items: list[dict[str, Any]] = []
+
+            def _walk(node: dict[str, Any], prefix: str) -> None:
+                for item in node.get("contents") or []:
+                    if len(items) >= MAX_LISTED_ITEMS:
+                        return
+                    item_path = f"{prefix}/{item.get('name', '')}"
+                    entry = {
+                        "path": item_path,
+                        "name": item.get("name"),
+                        "is_folder": bool(item.get("isfolder")),
+                        "modified": item.get("modified"),
+                    }
+                    if not entry["is_folder"]:
+                        entry["size"] = item.get("size")
+                    items.append(entry)
+                    if entry["is_folder"]:
+                        _walk(item, item_path)
+
+            _walk(meta, target.rstrip("/"))
+            return {
+                "path": target,
+                "exists": True,
+                "files": items,
+                "truncated": len(items) >= MAX_LISTED_ITEMS,
+            }
+
+        return await self._guard_auth(_do())
+
+    async def async_file_link(self, path: str) -> dict[str, Any]:
+        """Temporary download link of a file below the target folder."""
+        try:
+            target = self._confined(path)
+        except UnsafePathError as err:
+            raise HomeAssistantError(str(err)) from err
+
+        async def _do() -> dict[str, Any]:
+            try:
+                url, expires = await self.api.async_file_link(target)
+            except PCloudAuthError:
+                raise
+            except PCloudError as err:
+                raise HomeAssistantError(f"pCloud: {err}") from err
+            return {"path": target, "url": url, "expires": expires}
+
+        return await self._guard_auth(_do())
 
     async def async_upload_camera_snapshot(
         self, entity_id: str, subfolder: str | None, filename: str | None

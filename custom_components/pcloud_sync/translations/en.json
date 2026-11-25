@@ -155,7 +155,9 @@
   },
   "entity": {
     "button": {
-      "sync_now": { "name": "Sync now" }
+      "sync_now": {
+        "name": "Sync now"
+      }
     },
     "sensor": {
       "status": {
@@ -167,60 +169,162 @@
           "auth_error": "Re-authentication required"
         }
       },
-      "last_sync": { "name": "Last sync" },
-      "pending_files": { "name": "Pending files" },
-      "uploaded_files": { "name": "Uploaded files" },
-      "uploaded_data": { "name": "Uploaded data" },
-      "deleted_local_files": { "name": "Deleted local files" },
-      "failed_uploads": { "name": "Failed uploads" },
-      "quota_used": { "name": "Storage used" },
-      "quota_free": { "name": "Storage free" },
-      "quota_total": { "name": "Storage total" }
+      "last_sync": {
+        "name": "Last sync"
+      },
+      "pending_files": {
+        "name": "Pending files"
+      },
+      "uploaded_files": {
+        "name": "Uploaded files"
+      },
+      "uploaded_data": {
+        "name": "Uploaded data"
+      },
+      "deleted_local_files": {
+        "name": "Deleted local files"
+      },
+      "failed_uploads": {
+        "name": "Failed uploads"
+      },
+      "quota_used": {
+        "name": "Storage used"
+      },
+      "quota_free": {
+        "name": "Storage free"
+      },
+      "quota_total": {
+        "name": "Storage total"
+      }
     }
   },
   "exceptions": {
-    "no_entry": { "message": "No loaded pCloud Sync entry found (check config_entry_id)." },
-    "multiple_entries": { "message": "Several pCloud accounts are configured - please set config_entry_id." }
+    "no_entry": {
+      "message": "No loaded pCloud Sync entry found (check config_entry_id)."
+    },
+    "multiple_entries": {
+      "message": "Several pCloud accounts are configured - please set config_entry_id."
+    }
   },
   "services": {
     "sync_now": {
       "name": "Sync now",
       "description": "Scans all watch folders (and the local cache) and uploads new or changed files.",
       "fields": {
-        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+        "config_entry_id": {
+          "name": "pCloud account",
+          "description": "Only needed if more than one account is configured."
+        }
       }
     },
     "upload_file": {
       "name": "Upload file",
       "description": "Uploads a single local file. The file must be in an allowed folder.",
       "fields": {
-        "path": { "name": "Path", "description": "Absolute path of the local file." },
-        "subfolder": { "name": "Sub folder", "description": "Sub folder below the pCloud target folder." },
-        "delete_after_upload": { "name": "Delete after upload", "description": "Delete the local file after a checksum-verified upload." },
-        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+        "path": {
+          "name": "Path",
+          "description": "Absolute path of the local file."
+        },
+        "subfolder": {
+          "name": "Sub folder",
+          "description": "Sub folder below the pCloud target folder."
+        },
+        "delete_after_upload": {
+          "name": "Delete after upload",
+          "description": "Delete the local file after a checksum-verified upload."
+        },
+        "config_entry_id": {
+          "name": "pCloud account",
+          "description": "Only needed if more than one account is configured."
+        }
       }
     },
     "upload_camera_snapshot": {
       "name": "Upload camera snapshot",
       "description": "Takes a snapshot of one or more cameras and uploads it.",
       "fields": {
-        "entity_id": { "name": "Cameras", "description": "Camera entities." },
-        "subfolder": { "name": "Sub folder", "description": "Default: snapshots/[camera]." },
-        "filename": { "name": "File name", "description": "Default: [camera]_[timestamp].jpg" },
-        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+        "entity_id": {
+          "name": "Cameras",
+          "description": "Camera entities."
+        },
+        "subfolder": {
+          "name": "Sub folder",
+          "description": "Default: snapshots/[camera]."
+        },
+        "filename": {
+          "name": "File name",
+          "description": "Default: [camera]_[timestamp].jpg"
+        },
+        "config_entry_id": {
+          "name": "pCloud account",
+          "description": "Only needed if more than one account is configured."
+        }
       }
     },
     "upload_frigate_event": {
       "name": "Upload Frigate event",
       "description": "Downloads clip and/or snapshot of a Frigate event from the Frigate API and uploads it.",
       "fields": {
-        "event_id": { "name": "Event ID", "description": "Frigate event id, e.g. from the MQTT topic frigate/events (after.id)." },
-        "media": { "name": "Media", "description": "What to upload." },
-        "camera_name": { "name": "Camera name", "description": "Used for the folder and file name." },
-        "subfolder": { "name": "Sub folder", "description": "Default: frigate/[camera]." },
-        "frigate_url": { "name": "Frigate URL", "description": "Overrides the Frigate URL from the options." },
-        "retries": { "name": "Retries", "description": "Frigate creates clips after an event has ended; retry every 10 s this many times." },
-        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+        "event_id": {
+          "name": "Event ID",
+          "description": "Frigate event id, e.g. from the MQTT topic frigate/events (after.id)."
+        },
+        "media": {
+          "name": "Media",
+          "description": "What to upload."
+        },
+        "camera_name": {
+          "name": "Camera name",
+          "description": "Used for the folder and file name."
+        },
+        "subfolder": {
+          "name": "Sub folder",
+          "description": "Default: frigate/[camera]."
+        },
+        "frigate_url": {
+          "name": "Frigate URL",
+          "description": "Overrides the Frigate URL from the options."
+        },
+        "retries": {
+          "name": "Retries",
+          "description": "Frigate creates clips after an event has ended; retry every 10 s this many times."
+        },
+        "config_entry_id": {
+          "name": "pCloud account",
+          "description": "Only needed if more than one account is configured."
+        }
+      }
+    },
+    "list_folder": {
+      "name": "List uploaded files",
+      "description": "Lists files below the pCloud target folder (read only, administrators only). Used e.g. by Alcedo NVR to show archived events.",
+      "fields": {
+        "path": {
+          "name": "Path",
+          "description": "Folder below the target folder, empty = target folder."
+        },
+        "recursive": {
+          "name": "Include sub folders",
+          "description": "Also list all sub folders."
+        },
+        "config_entry_id": {
+          "name": "pCloud account",
+          "description": "Only needed if more than one account is configured."
+        }
+      }
+    },
+    "get_file_link": {
+      "name": "Get download link",
+      "description": "Returns a temporary download link of a file below the pCloud target folder (administrators only).",
+      "fields": {
+        "path": {
+          "name": "Path",
+          "description": "File below the target folder (or the remote path returned by an upload)."
+        },
+        "config_entry_id": {
+          "name": "pCloud account",
+          "description": "Only needed if more than one account is configured."
+        }
       }
     }
   }

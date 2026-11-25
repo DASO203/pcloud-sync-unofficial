@@ -16,6 +16,7 @@ from homeassistant.core import (
 )
 from homeassistant.exceptions import ServiceValidationError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.service import async_register_admin_service
 
 from .const import (
     ATTR_CAMERA_NAME,
@@ -25,6 +26,7 @@ from .const import (
     ATTR_FILENAME,
     ATTR_MEDIA,
     ATTR_PATH,
+    ATTR_RECURSIVE,
     ATTR_RETRIES,
     ATTR_SUBFOLDER,
     CONF_FRIGATE_URL,
@@ -32,6 +34,8 @@ from .const import (
     MEDIA_BOTH,
     MEDIA_CLIP,
     MEDIA_SNAPSHOT,
+    SERVICE_GET_FILE_LINK,
+    SERVICE_LIST_FOLDER,
     SERVICE_SYNC_NOW,
     SERVICE_UPLOAD_FILE,
     SERVICE_UPLOAD_FRIGATE_EVENT,
@@ -74,6 +78,15 @@ UPLOAD_FRIGATE_SCHEMA = vol.Schema(
         vol.Optional(ATTR_RETRIES, default=3): vol.All(vol.Coerce(int), vol.Range(0, 10)),
     }
 )
+
+LIST_FOLDER_SCHEMA = vol.Schema(
+    {
+        **_BASE,
+        vol.Optional(ATTR_PATH, default=""): cv.string,
+        vol.Optional(ATTR_RECURSIVE, default=False): cv.boolean,
+    }
+)
+FILE_LINK_SCHEMA = vol.Schema({**_BASE, vol.Required(ATTR_PATH): cv.string})
 
 
 def _manager(hass: HomeAssistant, call: ServiceCall) -> SyncManager:
@@ -122,6 +135,24 @@ def async_setup_services(hass: HomeAssistant) -> None:
             call.data.get(ATTR_SUBFOLDER),
             call.data.get(CONF_FRIGATE_URL),
             call.data[ATTR_RETRIES],
+        )
+
+    async def list_folder(call: ServiceCall) -> ServiceResponse:
+        return await _manager(hass, call).async_list_folder(
+            call.data[ATTR_PATH], call.data[ATTR_RECURSIVE]
+        )
+
+    async def get_file_link(call: ServiceCall) -> ServiceResponse:
+        return await _manager(hass, call).async_file_link(call.data[ATTR_PATH])
+
+    # Reading back is limited to the target folder and to administrators
+    # (internal calls from other integrations, e.g. Alcedo NVR, have no user).
+    for name, handler, schema in (
+        (SERVICE_LIST_FOLDER, list_folder, LIST_FOLDER_SCHEMA),
+        (SERVICE_GET_FILE_LINK, get_file_link, FILE_LINK_SCHEMA),
+    ):
+        async_register_admin_service(
+            hass, DOMAIN, name, handler, schema=schema, supports_response=SupportsResponse.ONLY
         )
 
     for name, handler, schema in (

@@ -77,6 +77,8 @@ SERVICE_SYNC_NOW: Final = "sync_now"
 SERVICE_UPLOAD_FILE: Final = "upload_file"
 SERVICE_UPLOAD_SNAPSHOT: Final = "upload_camera_snapshot"
 SERVICE_UPLOAD_FRIGATE_EVENT: Final = "upload_frigate_event"
+SERVICE_LIST_FOLDER: Final = "list_folder"
+SERVICE_GET_FILE_LINK: Final = "get_file_link"
 
 ATTR_CONFIG_ENTRY_ID: Final = "config_entry_id"
 ATTR_PATH: Final = "path"
@@ -87,6 +89,7 @@ ATTR_EVENT_ID: Final = "event_id"
 ATTR_MEDIA: Final = "media"
 ATTR_CAMERA_NAME: Final = "camera_name"
 ATTR_RETRIES: Final = "retries"
+ATTR_RECURSIVE: Final = "recursive"
 
 MEDIA_CLIP: Final = "clip"
 MEDIA_SNAPSHOT: Final = "snapshot"
@@ -102,3 +105,6 @@ STATUS_IDLE: Final = "idle"
 STATUS_SYNCING: Final = "syncing"
 STATUS_ERROR: Final = "error"
 STATUS_AUTH_ERROR: Final = "auth_error"
+
+FOLDER_NOT_FOUND_CODES: Final = frozenset({2005})
+MAX_LISTED_ITEMS: Final = 20000

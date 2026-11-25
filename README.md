@@ -270,6 +270,10 @@ All actions return a response (use `response_variable`) and accept an optional `
 | `pcloud_sync.upload_file` | `path`, `subfolder`, `delete_after_upload` | Upload one local file (must be in an allowed folder). |
 | `pcloud_sync.upload_camera_snapshot` | `entity_id`, `subfolder`, `filename` | Snapshot of one or more cameras. |
 | `pcloud_sync.upload_frigate_event` | `event_id`, `media` (`clip`/`snapshot`/`both`), `camera_name`, `subfolder`, `frigate_url`, `retries` | Download from Frigate and upload. Retries every 10 s while Frigate is still creating the clip. |
+| `pcloud_sync.list_folder` | `path`, `recursive` | **Read back:** list files below the target folder. *Administrators only.* |
+| `pcloud_sync.get_file_link` | `path` | **Read back:** temporary download link of a file below the target folder. *Administrators only.* |
+
+The two read-back actions can only see the pCloud target folder of this integration (paths outside are mapped into it, `..` is rejected). [Alcedo NVR](https://github.com/DASO203/alcedo-nvr-integration) uses them to show archived alarms in its timeline after the local copies were deleted.
 
 Example response of `upload_file`:
 

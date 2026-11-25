@@ -263,6 +263,10 @@ Alle Aktionen liefern eine Antwort (`response_variable`) und akzeptieren optiona
 | `pcloud_sync.upload_file` | `path`, `subfolder`, `delete_after_upload` | Eine lokale Datei hochladen (muss in einem freigegebenen Ordner liegen). |
 | `pcloud_sync.upload_camera_snapshot` | `entity_id`, `subfolder`, `filename` | Snapshot einer oder mehrerer Kameras. |
 | `pcloud_sync.upload_frigate_event` | `event_id`, `media` (`clip`/`snapshot`/`both`), `camera_name`, `subfolder`, `frigate_url`, `retries` | Von Frigate laden und hochladen. Versucht es alle 10 s erneut, solange Frigate den Clip noch erstellt. |
+| `pcloud_sync.list_folder` | `path`, `recursive` | **Zurücklesen:** Dateien unterhalb des Zielordners auflisten. *Nur für Administratoren.* |
+| `pcloud_sync.get_file_link` | `path` | **Zurücklesen:** zeitlich begrenzter Download-Link einer Datei unterhalb des Zielordners. *Nur für Administratoren.* |
+
+Die beiden Zurücklese-Aktionen sehen nur den pCloud-Zielordner dieser Integration. Pfade außerhalb werden in ihn umgelenkt, `..` wird abgelehnt. [Alcedo NVR](https://github.com/DASO203/alcedo-nvr-integration) nutzt sie, um archivierte Alarme im Zeitstrahl anzuzeigen, nachdem die lokalen Kopien gelöscht wurden.
 
 ## Entitäten
 

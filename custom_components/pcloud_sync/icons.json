@@ -1,7 +1,9 @@
 {
   "entity": {
     "button": {
-      "sync_now": { "default": "mdi:cloud-sync" }
+      "sync_now": {
+        "default": "mdi:cloud-sync"
+      }
     },
     "sensor": {
       "status": {
@@ -12,21 +14,53 @@
           "auth_error": "mdi:cloud-lock"
         }
       },
-      "last_sync": { "default": "mdi:clock-check-outline" },
-      "pending_files": { "default": "mdi:file-clock-outline" },
-      "uploaded_files": { "default": "mdi:file-upload-outline" },
-      "uploaded_data": { "default": "mdi:cloud-upload" },
-      "deleted_local_files": { "default": "mdi:delete-clock-outline" },
-      "failed_uploads": { "default": "mdi:file-alert-outline" },
-      "quota_used": { "default": "mdi:harddisk" },
-      "quota_free": { "default": "mdi:harddisk-plus" },
-      "quota_total": { "default": "mdi:database" }
+      "last_sync": {
+        "default": "mdi:clock-check-outline"
+      },
+      "pending_files": {
+        "default": "mdi:file-clock-outline"
+      },
+      "uploaded_files": {
+        "default": "mdi:file-upload-outline"
+      },
+      "uploaded_data": {
+        "default": "mdi:cloud-upload"
+      },
+      "deleted_local_files": {
+        "default": "mdi:delete-clock-outline"
+      },
+      "failed_uploads": {
+        "default": "mdi:file-alert-outline"
+      },
+      "quota_used": {
+        "default": "mdi:harddisk"
+      },
+      "quota_free": {
+        "default": "mdi:harddisk-plus"
+      },
+      "quota_total": {
+        "default": "mdi:database"
+      }
     }
   },
   "services": {
-    "sync_now": { "service": "mdi:cloud-sync" },
-    "upload_file": { "service": "mdi:file-upload" },
-    "upload_camera_snapshot": { "service": "mdi:camera-plus" },
-    "upload_frigate_event": { "service": "mdi:cctv" }
+    "sync_now": {
+      "service": "mdi:cloud-sync"
+    },
+    "upload_file": {
+      "service": "mdi:file-upload"
+    },
+    "upload_camera_snapshot": {
+      "service": "mdi:camera-plus"
+    },
+    "upload_frigate_event": {
+      "service": "mdi:cctv"
+    },
+    "list_folder": {
+      "service": "mdi:folder-search-outline"
+    },
+    "get_file_link": {
+      "service": "mdi:link-variant"
+    }
   }
 }
