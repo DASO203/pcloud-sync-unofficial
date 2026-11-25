@@ -205,8 +205,8 @@
       "description": "Takes a snapshot of one or more cameras and uploads it.",
       "fields": {
         "entity_id": { "name": "Cameras", "description": "Camera entities." },
-        "subfolder": { "name": "Sub folder", "description": "Default: snapshots/<camera>." },
-        "filename": { "name": "File name", "description": "Default: <camera>_<timestamp>.jpg" },
+        "subfolder": { "name": "Sub folder", "description": "Default: snapshots/[camera]." },
+        "filename": { "name": "File name", "description": "Default: [camera]_[timestamp].jpg" },
         "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
       }
     },
@@ -217,7 +217,7 @@
         "event_id": { "name": "Event ID", "description": "Frigate event id, e.g. from the MQTT topic frigate/events (after.id)." },
         "media": { "name": "Media", "description": "What to upload." },
         "camera_name": { "name": "Camera name", "description": "Used for the folder and file name." },
-        "subfolder": { "name": "Sub folder", "description": "Default: frigate/<camera>." },
+        "subfolder": { "name": "Sub folder", "description": "Default: frigate/[camera]." },
         "frigate_url": { "name": "Frigate URL", "description": "Overrides the Frigate URL from the options." },
         "retries": { "name": "Retries", "description": "Frigate creates clips after an event has ended; retry every 10 s this many times." },
         "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }

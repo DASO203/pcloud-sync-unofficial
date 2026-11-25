@@ -205,8 +205,8 @@
       "description": "Erstellt einen Snapshot einer oder mehrerer Kameras und lädt ihn hoch.",
       "fields": {
         "entity_id": { "name": "Kameras", "description": "Kamera-Entitäten." },
-        "subfolder": { "name": "Unterordner", "description": "Standard: snapshots/<kamera>." },
-        "filename": { "name": "Dateiname", "description": "Standard: <kamera>_<zeitstempel>.jpg" },
+        "subfolder": { "name": "Unterordner", "description": "Standard: snapshots/[kamera]." },
+        "filename": { "name": "Dateiname", "description": "Standard: [kamera]_[zeitstempel].jpg" },
         "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
       }
     },
@@ -217,7 +217,7 @@
         "event_id": { "name": "Event-ID", "description": "Frigate-Event-ID, z. B. aus dem MQTT-Topic frigate/events (after.id)." },
         "media": { "name": "Medien", "description": "Was hochgeladen werden soll." },
         "camera_name": { "name": "Kameraname", "description": "Wird für Ordner- und Dateinamen genutzt." },
-        "subfolder": { "name": "Unterordner", "description": "Standard: frigate/<kamera>." },
+        "subfolder": { "name": "Unterordner", "description": "Standard: frigate/[kamera]." },
         "frigate_url": { "name": "Frigate-URL", "description": "Überschreibt die Frigate-URL aus den Optionen." },
         "retries": { "name": "Wiederholungen", "description": "Frigate erstellt Clips erst nach Event-Ende; so oft wird alle 10 s erneut versucht." },
         "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
