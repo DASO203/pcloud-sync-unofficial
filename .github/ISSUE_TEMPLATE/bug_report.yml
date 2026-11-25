@@ -1,0 +1,37 @@
+name: Bug report
+description: Something does not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please never post access tokens. Diagnostics downloaded from Home Assistant are already redacted.
+  - type: input
+    id: version
+    attributes:
+      label: Integration version
+    validations:
+      required: true
+  - type: input
+    id: ha_version
+    attributes:
+      label: Home Assistant version / installation type
+      placeholder: 2025.11.2, Home Assistant OS
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs (custom_components.pcloud_sync at debug level)
+      render: text
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Diagnostics
+      description: Integration page → ⋮ → Download diagnostics, then attach the file.

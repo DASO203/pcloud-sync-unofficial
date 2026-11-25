@@ -1,0 +1,88 @@
+sync_now:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: pcloud_sync
+
+upload_file:
+  fields:
+    path:
+      required: true
+      example: /media/exports/report.pdf
+      selector:
+        text:
+    subfolder:
+      example: exports
+      selector:
+        text:
+    delete_after_upload:
+      default: false
+      selector:
+        boolean:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: pcloud_sync
+
+upload_camera_snapshot:
+  fields:
+    entity_id:
+      required: true
+      selector:
+        entity:
+          domain: camera
+          multiple: true
+    subfolder:
+      example: snapshots/front_door
+      selector:
+        text:
+    filename:
+      example: doorbell.jpg
+      selector:
+        text:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: pcloud_sync
+
+upload_frigate_event:
+  fields:
+    event_id:
+      required: true
+      example: "1700000000.123456-abc123"
+      selector:
+        text:
+    media:
+      default: both
+      selector:
+        select:
+          translation_key: media
+          options:
+            - clip
+            - snapshot
+            - both
+    camera_name:
+      example: front_door
+      selector:
+        text:
+    subfolder:
+      example: frigate/front_door
+      selector:
+        text:
+    frigate_url:
+      example: http://ccab4aaf-frigate:5000
+      selector:
+        text:
+          type: url
+    retries:
+      default: 3
+      selector:
+        number:
+          min: 0
+          max: 10
+          mode: box
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: pcloud_sync

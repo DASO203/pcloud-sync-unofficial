@@ -1,0 +1,227 @@
+{
+  "application_credentials": {
+    "description": "Diese Integration enthält keine gemeinsame pCloud-App. Lege unter [pCloud My Applications]({developer_url}) deine **eigene** App an, trage als Redirect-URI `{redirect_url}` ein und gib hier deren *Client ID* und *Client Secret* ein."
+  },
+  "config": {
+    "step": {
+      "pick_implementation": {
+        "title": "Authentifizierungsmethode wählen"
+      },
+      "settings": {
+        "title": "Zielordner in pCloud",
+        "description": "Verbunden als **{account}**. Alle Daten werden unterhalb dieses Ordners abgelegt. Er wird angelegt, falls er noch nicht existiert.",
+        "data": {
+          "remote_folder": "pCloud-Ordner"
+        },
+        "data_description": {
+          "remote_folder": "Absoluter Pfad in deinem pCloud-Laufwerk, z. B. /HomeAssistant/Sync"
+        }
+      },
+      "reauth_confirm": {
+        "title": "pCloud erneut anmelden",
+        "description": "pCloud hat das gespeicherte Zugriffstoken abgelehnt (evtl. wurde es widerrufen). Bitte melde dich erneut an."
+      }
+    },
+    "error": {
+      "invalid_remote_folder": "Ungültiger Ordner. Nutze einen absoluten Pfad ohne '..' (das Wurzelverzeichnis '/' ist nicht erlaubt)."
+    },
+    "abort": {
+      "already_configured": "Dieses pCloud-Konto ist bereits eingerichtet.",
+      "invalid_auth": "pCloud hat das Zugriffstoken abgelehnt.",
+      "cannot_connect": "Keine Verbindung zu pCloud möglich.",
+      "wrong_account": "Du hast dich mit einem anderen pCloud-Konto angemeldet als dem eingerichteten.",
+      "reauth_successful": "Erneute Anmeldung erfolgreich.",
+      "missing_credentials": "Keine Anwendungs-Anmeldedaten gefunden. Lege zuerst Client ID / Secret deiner pCloud-App an.",
+      "missing_configuration": "Die Integration ist nicht konfiguriert. Bitte folge der Dokumentation.",
+      "authorize_url_timeout": "Zeitüberschreitung beim Erzeugen der Autorisierungs-URL.",
+      "no_url_available": "Keine URL verfügbar. Siehe Dokumentation zu diesem Fehler.",
+      "oauth_error": "Ungültige Token-Daten empfangen.",
+      "oauth_failed": "Fehler beim Abrufen des Zugriffstokens von pCloud.",
+      "oauth_timeout": "Zeitüberschreitung beim Abrufen des OAuth-Tokens.",
+      "oauth_unauthorized": "OAuth-Autorisierungsfehler beim Abrufen des Zugriffstokens.",
+      "user_rejected_authorize": "Kontoverknüpfung abgelehnt."
+    },
+    "create_entry": {
+      "default": "Verbunden. Öffne **Konfigurieren**, um festzulegen, welche Ordner synchronisiert werden."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "pCloud Sync Optionen",
+        "description": "Lege fest, was hochgeladen wird und was danach passiert. Tipp: Aktiviere zuerst den **Testmodus**, um im Log zu sehen, was passieren würde.",
+        "data": {
+          "remote_folder": "pCloud-Zielordner"
+        },
+        "data_description": {
+          "remote_folder": "Alles wird unterhalb dieses pCloud-Ordners abgelegt."
+        },
+        "sections": {
+          "folders": {
+            "name": "Lokale Ordner & Filter",
+            "description": "Ein Ordner pro Zeile. Optionaler Unterordner in pCloud: `/media/frigate/clips -> frigate/clips`. Ordner müssen in Home Assistant freigegeben sein (`allowlist_external_dirs`; `/media` ist standardmäßig freigegeben).",
+            "data": {
+              "watch_folders": "Überwachte Ordner",
+              "include_patterns": "Einschluss-Muster",
+              "exclude_patterns": "Ausschluss-Muster"
+            },
+            "data_description": {
+              "watch_folders": "Lokale Ordner, deren Dateien hochgeladen werden (inkl. Unterordner).",
+              "include_patterns": "Kommagetrennt, z. B. `*.mp4, *.jpg`. `*` = alles.",
+              "exclude_patterns": "Kommagetrennt, z. B. `*.tmp, .*, cache/*`."
+            }
+          },
+          "behaviour": {
+            "name": "Verhalten",
+            "data": {
+              "scan_interval": "Sync-Intervall",
+              "min_file_age": "Mindestalter einer Datei",
+              "delete_after_upload": "Lokale Dateien nach dem Upload löschen",
+              "date_subfolders": "Datumsordner für Aktions-Uploads",
+              "conflict_mode": "Wenn die Datei in pCloud schon existiert",
+              "dry_run": "Testmodus (nur protokollieren)"
+            },
+            "data_description": {
+              "scan_interval": "Wie oft die Ordner durchsucht werden. 0 = nur manuell (Button / Aktion).",
+              "min_file_age": "Kürzlich geänderte Dateien werden übersprungen (sie werden evtl. noch geschrieben).",
+              "delete_after_upload": "Löscht eine lokale Datei NUR, wenn pCloud den Upload mit passender SHA-1-Prüfsumme bestätigt hat. Aus = lokale Dateien werden nie angefasst.",
+              "date_subfolders": "Snapshots / Frigate-Events / hochgeladene Dateien in Unterordnern JJJJ/MM/TT ablegen.",
+              "conflict_mode": "Umbenennen behält beide Dateien, Überschreiben erzeugt in pCloud eine neue Revision.",
+              "dry_run": "Es wird nichts hochgeladen oder gelöscht, jede Aktion wird nur protokolliert."
+            }
+          },
+          "cache": {
+            "name": "Lokaler Zwischenspeicher (optional)",
+            "description": "Daten, die nicht als Datei vorliegen (Kamera-Snapshots, Frigate-Clips), werden normalerweise direkt aus dem Arbeitsspeicher hochgeladen. Mit Zwischenspeicher werden sie zuerst auf die Festplatte geschrieben: große Clips belegen keinen RAM und fehlgeschlagene Uploads werden beim nächsten Sync wiederholt. Zwischengespeicherte Dateien werden nach einem verifizierten Upload immer entfernt.",
+            "data": {
+              "use_local_cache": "Lokalen Zwischenspeicher nutzen",
+              "cache_path": "Ordner für den Zwischenspeicher"
+            },
+            "data_description": {
+              "cache_path": "Muss im Konfigurationsordner oder einem freigegebenen Ordner liegen. Hinweis: Ein Ordner in /config ist Teil der Home-Assistant-Backups."
+            }
+          },
+          "sources": {
+            "name": "Datenquellen",
+            "data": {
+              "frigate_url": "Frigate-URL"
+            },
+            "data_description": {
+              "frigate_url": "Basis-URL der Frigate-API, z. B. `http://ccab4aaf-frigate:5000` (Add-on) oder `http://192.168.1.10:5000`. Wird von der Aktion `upload_frigate_event` genutzt."
+            }
+          },
+          "advanced": {
+            "name": "Erweitert",
+            "data": {
+              "max_files_per_run": "Max. Dateien pro Sync",
+              "max_parallel_uploads": "Parallele Uploads",
+              "upload_timeout": "Upload-Zeitlimit"
+            },
+            "data_description": {
+              "max_files_per_run": "Weitere Dateien werden im nächsten Durchlauf hochgeladen.",
+              "max_parallel_uploads": "Wie viele Uploads gleichzeitig laufen (1-4).",
+              "upload_timeout": "Maximale Dauer eines einzelnen Uploads."
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "invalid_remote_folder": "Ungültiger pCloud-Ordner. Nutze einen absoluten Pfad ohne '..' (nicht '/').",
+      "invalid_watch_folder": "Ungültiger Ordner: {path}",
+      "watch_folder_missing": "Ordner existiert nicht: {path}",
+      "watch_folder_not_allowed": "Home Assistant erlaubt keinen Zugriff auf {path}. Ergänze ihn unter `allowlist_external_dirs` in der configuration.yaml.",
+      "invalid_cache_path": "Der Zwischenspeicher muss ein absoluter Pfad sein: {path}",
+      "cache_path_not_allowed": "Der Zwischenspeicher {path} liegt weder im Konfigurationsordner noch in einem freigegebenen Ordner.",
+      "cache_overlaps_watch_folder": "Der Zwischenspeicher {path} darf nicht in einem überwachten Ordner liegen (oder einen enthalten).",
+      "cache_path_not_writable": "Der Zwischenspeicher {path} kann nicht angelegt werden.",
+      "invalid_frigate_url": "Die Frigate-URL muss mit http:// oder https:// beginnen."
+    }
+  },
+  "selector": {
+    "conflict_mode": {
+      "options": {
+        "rename": "Umbenennen (beide behalten)",
+        "overwrite": "Überschreiben (neue Revision)"
+      }
+    },
+    "media": {
+      "options": {
+        "clip": "Clip (Video)",
+        "snapshot": "Snapshot (Bild)",
+        "both": "Clip und Snapshot"
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "sync_now": { "name": "Jetzt synchronisieren" }
+    },
+    "sensor": {
+      "status": {
+        "name": "Status",
+        "state": {
+          "idle": "Bereit",
+          "syncing": "Synchronisiert",
+          "error": "Fehler",
+          "auth_error": "Erneute Anmeldung nötig"
+        }
+      },
+      "last_sync": { "name": "Letzter Sync" },
+      "pending_files": { "name": "Ausstehende Dateien" },
+      "uploaded_files": { "name": "Hochgeladene Dateien" },
+      "uploaded_data": { "name": "Hochgeladene Daten" },
+      "deleted_local_files": { "name": "Lokal gelöschte Dateien" },
+      "failed_uploads": { "name": "Fehlgeschlagene Uploads" },
+      "quota_used": { "name": "Speicher belegt" },
+      "quota_free": { "name": "Speicher frei" },
+      "quota_total": { "name": "Speicher gesamt" }
+    }
+  },
+  "exceptions": {
+    "no_entry": { "message": "Kein geladener pCloud-Sync-Eintrag gefunden (config_entry_id prüfen)." },
+    "multiple_entries": { "message": "Mehrere pCloud-Konten eingerichtet - bitte config_entry_id angeben." }
+  },
+  "services": {
+    "sync_now": {
+      "name": "Jetzt synchronisieren",
+      "description": "Durchsucht alle überwachten Ordner (und den Zwischenspeicher) und lädt neue oder geänderte Dateien hoch.",
+      "fields": {
+        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+      }
+    },
+    "upload_file": {
+      "name": "Datei hochladen",
+      "description": "Lädt eine einzelne lokale Datei hoch. Die Datei muss in einem freigegebenen Ordner liegen.",
+      "fields": {
+        "path": { "name": "Pfad", "description": "Absoluter Pfad der lokalen Datei." },
+        "subfolder": { "name": "Unterordner", "description": "Unterordner unterhalb des pCloud-Zielordners." },
+        "delete_after_upload": { "name": "Nach Upload löschen", "description": "Lokale Datei nach einem per Prüfsumme verifizierten Upload löschen." },
+        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+      }
+    },
+    "upload_camera_snapshot": {
+      "name": "Kamera-Snapshot hochladen",
+      "description": "Erstellt einen Snapshot einer oder mehrerer Kameras und lädt ihn hoch.",
+      "fields": {
+        "entity_id": { "name": "Kameras", "description": "Kamera-Entitäten." },
+        "subfolder": { "name": "Unterordner", "description": "Standard: snapshots/<kamera>." },
+        "filename": { "name": "Dateiname", "description": "Standard: <kamera>_<zeitstempel>.jpg" },
+        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+      }
+    },
+    "upload_frigate_event": {
+      "name": "Frigate-Event hochladen",
+      "description": "Lädt Clip und/oder Snapshot eines Frigate-Events über die Frigate-API herunter und anschließend zu pCloud hoch.",
+      "fields": {
+        "event_id": { "name": "Event-ID", "description": "Frigate-Event-ID, z. B. aus dem MQTT-Topic frigate/events (after.id)." },
+        "media": { "name": "Medien", "description": "Was hochgeladen werden soll." },
+        "camera_name": { "name": "Kameraname", "description": "Wird für Ordner- und Dateinamen genutzt." },
+        "subfolder": { "name": "Unterordner", "description": "Standard: frigate/<kamera>." },
+        "frigate_url": { "name": "Frigate-URL", "description": "Überschreibt die Frigate-URL aus den Optionen." },
+        "retries": { "name": "Wiederholungen", "description": "Frigate erstellt Clips erst nach Event-Ende; so oft wird alle 10 s erneut versucht." },
+        "config_entry_id": { "name": "pCloud-Konto", "description": "Nur nötig, wenn mehrere Konten eingerichtet sind." }
+      }
+    }
+  }
+}

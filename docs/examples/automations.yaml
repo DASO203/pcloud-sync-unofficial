@@ -1,0 +1,95 @@
+# Example automations for pCloud Sync (Unofficial)
+# Copy what you need into automations.yaml or recreate it in the UI.
+
+# 1) Upload every finished Frigate event (clip + snapshot)
+- alias: "pCloud: Frigate event upload"
+  mode: queued
+  max: 20
+  triggers:
+    - trigger: mqtt
+      topic: frigate/events
+  conditions:
+    - condition: template
+      value_template: >
+        {{ trigger.payload_json.type == 'end'
+           and (trigger.payload_json.after.has_clip
+                or trigger.payload_json.after.has_snapshot) }}
+  actions:
+    - action: pcloud_sync.upload_frigate_event
+      data:
+        event_id: "{{ trigger.payload_json.after.id }}"
+        camera_name: "{{ trigger.payload_json.after.camera }}"
+        media: >
+          {% set a = trigger.payload_json.after %}
+          {{ 'both' if a.has_clip and a.has_snapshot else ('clip' if a.has_clip else 'snapshot') }}
+
+# 2) Only persons on a specific camera
+- alias: "pCloud: Frigate persons at the front door"
+  mode: queued
+  triggers:
+    - trigger: mqtt
+      topic: frigate/events
+  conditions:
+    - condition: template
+      value_template: >
+        {{ trigger.payload_json.type == 'end'
+           and trigger.payload_json.after.camera == 'front_door'
+           and trigger.payload_json.after.label == 'person' }}
+  actions:
+    - action: pcloud_sync.upload_frigate_event
+      data:
+        event_id: "{{ trigger.payload_json.after.id }}"
+        camera_name: front_door
+        media: clip
+        subfolder: frigate/persons
+
+# 3) Camera snapshot when the doorbell rings
+- alias: "pCloud: doorbell snapshot"
+  triggers:
+    - trigger: state
+      entity_id: binary_sensor.doorbell
+      to: "on"
+  actions:
+    - action: pcloud_sync.upload_camera_snapshot
+      data:
+        entity_id:
+          - camera.front_door
+
+# 4) Snapshot written by camera.snapshot, uploaded and removed locally
+- alias: "pCloud: garage snapshot every hour"
+  triggers:
+    - trigger: time_pattern
+      minutes: 0
+  variables:
+    file: "/media/snapshots/garage_{{ now().strftime('%Y%m%d_%H%M') }}.jpg"
+  actions:
+    - action: camera.snapshot
+      target:
+        entity_id: camera.garage
+      data:
+        filename: "{{ file }}"
+    - delay: 2
+    - action: pcloud_sync.upload_file
+      data:
+        path: "{{ file }}"
+        subfolder: garage
+        delete_after_upload: true
+
+# 5) Nightly sync (e.g. with sync interval set to 0)
+- alias: "pCloud: nightly sync"
+  triggers:
+    - trigger: time
+      at: "03:00:00"
+  actions:
+    - action: pcloud_sync.sync_now
+
+# 6) Notify on failed uploads
+- alias: "pCloud: notify on failure"
+  triggers:
+    - trigger: event
+      event_type: pcloud_sync_upload_failed
+  actions:
+    - action: persistent_notification.create
+      data:
+        title: "pCloud upload failed"
+        message: "{{ trigger.event.data.name }}: {{ trigger.event.data.error }}"

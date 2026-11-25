@@ -1,0 +1,227 @@
+{
+  "application_credentials": {
+    "description": "This integration does not ship a shared pCloud app. Create your **own** app at [pCloud My Applications]({developer_url}), set the redirect URI to `{redirect_url}` and enter its *Client ID* and *Client secret* here."
+  },
+  "config": {
+    "step": {
+      "pick_implementation": {
+        "title": "Pick authentication method"
+      },
+      "settings": {
+        "title": "Target folder in pCloud",
+        "description": "Connected as **{account}**. All data is uploaded below this folder. It is created if it does not exist.",
+        "data": {
+          "remote_folder": "pCloud folder"
+        },
+        "data_description": {
+          "remote_folder": "Absolute path in your pCloud drive, e.g. /HomeAssistant/Sync"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate pCloud",
+        "description": "pCloud rejected the stored access token (it may have been revoked). Please sign in again."
+      }
+    },
+    "error": {
+      "invalid_remote_folder": "Invalid folder. Use an absolute path without '..' (the drive root '/' is not allowed)."
+    },
+    "abort": {
+      "already_configured": "This pCloud account is already configured.",
+      "invalid_auth": "pCloud rejected the access token.",
+      "cannot_connect": "Could not connect to pCloud.",
+      "wrong_account": "You signed in with a different pCloud account than the one configured.",
+      "reauth_successful": "Re-authentication was successful.",
+      "missing_credentials": "No application credentials found. Add your pCloud Client ID / secret first.",
+      "missing_configuration": "The integration is not configured. Please follow the documentation.",
+      "authorize_url_timeout": "Timeout generating the authorize URL.",
+      "no_url_available": "No URL available. See the documentation for this error.",
+      "oauth_error": "Received invalid token data.",
+      "oauth_failed": "Error while obtaining the access token from pCloud.",
+      "oauth_timeout": "Timeout resolving the OAuth token.",
+      "oauth_unauthorized": "OAuth authorization error while obtaining the access token.",
+      "user_rejected_authorize": "Account linking rejected."
+    },
+    "create_entry": {
+      "default": "Connected. Open **Configure** to choose which folders are synced."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "pCloud Sync options",
+        "description": "Choose what is uploaded and what happens afterwards. Tip: enable **Dry run** first to see in the log what would happen.",
+        "data": {
+          "remote_folder": "pCloud target folder"
+        },
+        "data_description": {
+          "remote_folder": "Everything is uploaded below this pCloud folder."
+        },
+        "sections": {
+          "folders": {
+            "name": "Local folders & filters",
+            "description": "One folder per line. Optional remote sub folder: `/media/frigate/clips -> frigate/clips`. Folders must be allowed in Home Assistant (`allowlist_external_dirs`; `/media` is allowed by default).",
+            "data": {
+              "watch_folders": "Watch folders",
+              "include_patterns": "Include patterns",
+              "exclude_patterns": "Exclude patterns"
+            },
+            "data_description": {
+              "watch_folders": "Local folders whose files are uploaded (sub folders included).",
+              "include_patterns": "Comma separated, e.g. `*.mp4, *.jpg`. `*` = everything.",
+              "exclude_patterns": "Comma separated, e.g. `*.tmp, .*, cache/*`."
+            }
+          },
+          "behaviour": {
+            "name": "Behaviour",
+            "data": {
+              "scan_interval": "Sync interval",
+              "min_file_age": "Minimum file age",
+              "delete_after_upload": "Delete local files after upload",
+              "date_subfolders": "Date folders for action uploads",
+              "conflict_mode": "If the file already exists in pCloud",
+              "dry_run": "Dry run (log only)"
+            },
+            "data_description": {
+              "scan_interval": "How often watch folders are scanned. 0 = only manually (button / action).",
+              "min_file_age": "Files changed more recently are skipped (they may still be written).",
+              "delete_after_upload": "Deletes a local file ONLY after pCloud confirmed the upload with a matching SHA-1 checksum. Off = local files are never touched.",
+              "date_subfolders": "Put snapshots / Frigate events / uploaded files into YYYY/MM/DD sub folders.",
+              "conflict_mode": "Rename keeps both files, overwrite creates a new revision in pCloud.",
+              "dry_run": "Nothing is uploaded or deleted, every action is only logged."
+            }
+          },
+          "cache": {
+            "name": "Local cache (optional)",
+            "description": "Data that does not exist as a file (camera snapshots, Frigate clips) is normally uploaded straight from memory. With the cache it is first written to disk: large clips do not use RAM and failed uploads are retried on the next sync. Cached files are always removed after a verified upload.",
+            "data": {
+              "use_local_cache": "Use local cache",
+              "cache_path": "Cache folder"
+            },
+            "data_description": {
+              "cache_path": "Must be inside the config folder or an allowed folder. Note: a folder inside /config is part of Home Assistant backups."
+            }
+          },
+          "sources": {
+            "name": "Data sources",
+            "data": {
+              "frigate_url": "Frigate URL"
+            },
+            "data_description": {
+              "frigate_url": "Base URL of the Frigate API, e.g. `http://ccab4aaf-frigate:5000` (add-on) or `http://192.168.1.10:5000`. Used by the `upload_frigate_event` action."
+            }
+          },
+          "advanced": {
+            "name": "Advanced",
+            "data": {
+              "max_files_per_run": "Max. files per sync",
+              "max_parallel_uploads": "Parallel uploads",
+              "upload_timeout": "Upload timeout"
+            },
+            "data_description": {
+              "max_files_per_run": "Remaining files are uploaded in the next run.",
+              "max_parallel_uploads": "How many uploads run at the same time (1-4).",
+              "upload_timeout": "Maximum duration of a single upload."
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "invalid_remote_folder": "Invalid pCloud folder. Use an absolute path without '..' (not '/').",
+      "invalid_watch_folder": "Invalid watch folder: {path}",
+      "watch_folder_missing": "Folder does not exist: {path}",
+      "watch_folder_not_allowed": "Home Assistant does not allow access to {path}. Add it to `allowlist_external_dirs` in configuration.yaml.",
+      "invalid_cache_path": "Cache folder must be an absolute path: {path}",
+      "cache_path_not_allowed": "Cache folder {path} is neither inside the config folder nor an allowed folder.",
+      "cache_overlaps_watch_folder": "Cache folder {path} must not be inside a watch folder (or contain one).",
+      "cache_path_not_writable": "Cache folder {path} cannot be created.",
+      "invalid_frigate_url": "The Frigate URL must start with http:// or https://."
+    }
+  },
+  "selector": {
+    "conflict_mode": {
+      "options": {
+        "rename": "Rename (keep both)",
+        "overwrite": "Overwrite (new revision)"
+      }
+    },
+    "media": {
+      "options": {
+        "clip": "Clip (video)",
+        "snapshot": "Snapshot (image)",
+        "both": "Clip and snapshot"
+      }
+    }
+  },
+  "entity": {
+    "button": {
+      "sync_now": { "name": "Sync now" }
+    },
+    "sensor": {
+      "status": {
+        "name": "Status",
+        "state": {
+          "idle": "Idle",
+          "syncing": "Syncing",
+          "error": "Error",
+          "auth_error": "Re-authentication required"
+        }
+      },
+      "last_sync": { "name": "Last sync" },
+      "pending_files": { "name": "Pending files" },
+      "uploaded_files": { "name": "Uploaded files" },
+      "uploaded_data": { "name": "Uploaded data" },
+      "deleted_local_files": { "name": "Deleted local files" },
+      "failed_uploads": { "name": "Failed uploads" },
+      "quota_used": { "name": "Storage used" },
+      "quota_free": { "name": "Storage free" },
+      "quota_total": { "name": "Storage total" }
+    }
+  },
+  "exceptions": {
+    "no_entry": { "message": "No loaded pCloud Sync entry found (check config_entry_id)." },
+    "multiple_entries": { "message": "Several pCloud accounts are configured - please set config_entry_id." }
+  },
+  "services": {
+    "sync_now": {
+      "name": "Sync now",
+      "description": "Scans all watch folders (and the local cache) and uploads new or changed files.",
+      "fields": {
+        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+      }
+    },
+    "upload_file": {
+      "name": "Upload file",
+      "description": "Uploads a single local file. The file must be in an allowed folder.",
+      "fields": {
+        "path": { "name": "Path", "description": "Absolute path of the local file." },
+        "subfolder": { "name": "Sub folder", "description": "Sub folder below the pCloud target folder." },
+        "delete_after_upload": { "name": "Delete after upload", "description": "Delete the local file after a checksum-verified upload." },
+        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+      }
+    },
+    "upload_camera_snapshot": {
+      "name": "Upload camera snapshot",
+      "description": "Takes a snapshot of one or more cameras and uploads it.",
+      "fields": {
+        "entity_id": { "name": "Cameras", "description": "Camera entities." },
+        "subfolder": { "name": "Sub folder", "description": "Default: snapshots/<camera>." },
+        "filename": { "name": "File name", "description": "Default: <camera>_<timestamp>.jpg" },
+        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+      }
+    },
+    "upload_frigate_event": {
+      "name": "Upload Frigate event",
+      "description": "Downloads clip and/or snapshot of a Frigate event from the Frigate API and uploads it.",
+      "fields": {
+        "event_id": { "name": "Event ID", "description": "Frigate event id, e.g. from the MQTT topic frigate/events (after.id)." },
+        "media": { "name": "Media", "description": "What to upload." },
+        "camera_name": { "name": "Camera name", "description": "Used for the folder and file name." },
+        "subfolder": { "name": "Sub folder", "description": "Default: frigate/<camera>." },
+        "frigate_url": { "name": "Frigate URL", "description": "Overrides the Frigate URL from the options." },
+        "retries": { "name": "Retries", "description": "Frigate creates clips after an event has ended; retry every 10 s this many times." },
+        "config_entry_id": { "name": "pCloud account", "description": "Only needed if more than one account is configured." }
+      }
+    }
+  }
+}
