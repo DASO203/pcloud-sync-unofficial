@@ -4,7 +4,7 @@
 
 **Daten aus Home Assistant – Frigate-Clips, Kamera-Snapshots, Exporte, beliebige Dateien – direkt in dein pCloud-Laufwerk hochladen.**
 
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories)
+[![Marketplace](https://img.shields.io/badge/HA%20Marketplace-Custom-41BDF5.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=DASO203&repository=pcloud-sync-unofficial&category=integration)
 [![GitHub release](https://img.shields.io/github/v/release/DASO203/pcloud-sync-unofficial)](https://github.com/DASO203/pcloud-sync-unofficial/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
@@ -83,7 +83,21 @@ Hochgeladene Dateien werden (Pfad, Größe, Änderungszeit) in `.storage/pcloud_
 
 ## Installation
 
-### HACS (empfohlen)
+### Home Assistant Marketplace (ab 2026.11 – empfohlen)
+
+[![Home Assistant öffnen und dieses Repository im Marketplace hinzufügen.](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=DASO203&repository=pcloud-sync-unofficial&category=integration)
+
+Auf den Button klicken oder manuell:
+
+1. **Einstellungen → Marketplace** → oben rechts **Aus Link hinzufügen** (*Add from link*)
+2. `DASO203/pcloud-sync-unofficial` eingeben (Typ **Integration**)
+   – für per Link hinzugefügte Repositories fragt der Marketplace einmalig nach einer GitHub-Verbindung
+3. **pCloud Sync (Unofficial)** öffnen → **Herunterladen**
+4. Weiter mit der [Einrichtung](#einrichtung). Ein Neustart ist nur nach Updates nötig.
+
+> Sobald die Integration im Standard-Katalog gelistet ist, findest du sie einfach über die Suche nach **pCloud Sync** im Marketplace.
+
+### HACS (Home Assistant 2026.10 und älter)
 
 1. HACS → ⋮ → **Benutzerdefinierte Repositories**
 2. Repository: `https://github.com/DASO203/pcloud-sync-unofficial`, Typ **Integration**
@@ -322,7 +336,7 @@ Andernfalls bleibt die Datei erhalten und im Aktivitätsprotokoll steht ein Eint
 
 1. **Einstellungen → Geräte & Dienste → pCloud Sync → ⋮ → Löschen**
 2. Optional: Anwendungs-Anmeldedaten entfernen und die App in pCloud widerrufen
-3. Über HACS entfernen (oder `custom_components/pcloud_sync` löschen) und neu starten
+3. Im Marketplace entfernen (oder über HACS / `custom_components/pcloud_sync` löschen) und neu starten
 4. Optional: Zwischenspeicher-Ordner löschen
 
 Bereits zu pCloud hochgeladene Dateien bleiben unberührt.

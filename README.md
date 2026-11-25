@@ -4,7 +4,7 @@
 
 **Upload Home Assistant data – Frigate clips, camera snapshots, exports, any file – straight into your pCloud drive.**
 
-[![HACS Custom](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz/docs/faq/custom_repositories)
+[![Marketplace](https://img.shields.io/badge/HA%20Marketplace-Custom-41BDF5.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=DASO203&repository=pcloud-sync-unofficial&category=integration)
 [![GitHub release](https://img.shields.io/github/v/release/DASO203/pcloud-sync-unofficial)](https://github.com/DASO203/pcloud-sync-unofficial/releases)
 [![Validate](https://github.com/DASO203/pcloud-sync-unofficial/actions/workflows/validate.yml/badge.svg)](https://github.com/DASO203/pcloud-sync-unofficial/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -87,7 +87,21 @@ Uploaded files are remembered (path, size, modification time) in `.storage/pclou
 
 ## Installation
 
-### HACS (recommended)
+### Home Assistant Marketplace (2026.11 and newer – recommended)
+
+[![Open your Home Assistant instance and add this repository to the Marketplace.](https://my.home-assistant.io/badges/marketplace_repository.svg)](https://my.home-assistant.io/redirect/marketplace_repository/?owner=DASO203&repository=pcloud-sync-unofficial&category=integration)
+
+Click the button above, or manually:
+
+1. **Settings → Marketplace** → upper right **Add from link**
+2. Enter `DASO203/pcloud-sync-unofficial` (type **Integration**)
+   – the Marketplace asks once to connect to GitHub for repositories added by link
+3. Open **pCloud Sync (Unofficial)** → **Download**
+4. Continue with [Setup](#setup). A restart is only needed after updates.
+
+> Once the integration is listed in the default catalog, you can simply search for **pCloud Sync** in the Marketplace.
+
+### HACS (Home Assistant 2026.10 and older)
 
 1. HACS → ⋮ → **Custom repositories**
 2. Repository: `https://github.com/DASO203/pcloud-sync-unofficial`, type **Integration**
@@ -355,7 +369,7 @@ Found a security problem? See [SECURITY.md](SECURITY.md).
 
 1. **Settings → Devices & services → pCloud Sync → ⋮ → Delete**
 2. Optional: remove the application credentials and revoke the app in pCloud
-3. Remove via HACS (or delete `custom_components/pcloud_sync`) and restart
+3. Remove it in the Marketplace (or HACS / delete `custom_components/pcloud_sync`) and restart
 4. Optional: delete the cache folder
 
 Files already uploaded to pCloud are not touched.

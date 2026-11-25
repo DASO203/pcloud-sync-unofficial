@@ -3,6 +3,16 @@
 All notable changes to this project are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project uses [Semantic Versioning](https://semver.org/).
 
+## [0.1.1] - 2026-11-25
+
+### Added
+- Integration categories in `manifest.json` for the Home Assistant Marketplace.
+- Installation instructions and My Home Assistant button for the Marketplace (HA 2026.11+).
+
+### Fixed
+- Brand icon (trimmed, in `custom_components/pcloud_sync/brand/`) so it is shown in the Marketplace.
+- Translation texts rejected by hassfest.
+
 ## [0.1.0] - 2026-11-25
 
 ### Added
